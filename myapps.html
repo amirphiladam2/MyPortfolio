@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuTracker App - Futuristic Budget Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+        
+        :root {
+            --bg-primary: #0A0E17;  
+            --bg-secondary: #13151F;
+            --neon-primary: #00F0FF;
+            --neon-secondary: #FF00D6;
+            --accent-1: #7B00FF;
+            --accent-2: #00FF66;
+            --text-color: #E0E0E8;
+            --text-dim: #9CA3AF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Custom cursor */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 2px solid var(--neon-primary);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, border-color 0.3s ease;
+            box-shadow: 0 0 15px var(--neon-primary), 0 0 5px var(--neon-primary);
+        }
+        
+        /* Scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 100% 4px;
+            animation: scanline 8s linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(19, 21, 31, 0.8);
+            color: var(--neon-primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            filter: blur(120px);
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 5%;
+            width: 500px;
+            height: 500px;
+            background-color: var(--neon-primary);
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background-color: var(--neon-secondary);
+            animation: float 20s ease-in-out infinite reverse;
+        }
+
+        .shape-3 {
+            top: 60%;
+            left: 60%;
+            width: 300px;
+            height: 300px;
+            background-color: var(--accent-1);
+            animation: float 22s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(50px, -30px) rotate(120deg); }
+            66% { transform: translate(-30px, 50px) rotate(240deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(19, 21, 31, 0.9) 100%);
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary), var(--accent-1));
+            box-shadow: 0 0 20px var(--neon-primary);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .app-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, var(--neon-primary), var(--accent-1));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            color: var(--bg-primary);
+            font-weight: bold;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(0, 240, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 60px rgba(0, 240, 255, 0.6), 0 20px 40px rgba(0, 0, 0, 0.4);
+                transform: scale(1.05);
+            }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .version {
+            color: var(--neon-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--neon-primary);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* App Info Section */
+        .app-info {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .app-info h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .app-description {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            line-height: 1.8;
+            background: rgba(19, 21, 31, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight {
+            color: var(--neon-primary);
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            overflow: hidden;
+            border-radius: 25px;
+            background: rgba(19, 21, 31, 0.8);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+            backdrop-filter: blur(15px);
+        }
+
+        .carousel-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+            box-shadow: 0 0 15px var(--neon-primary);
+            z-index: 2;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 700px;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            background: linear-gradient(135deg, rgba(19, 21, 31, 0.9), rgba(10, 14, 23, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .slide img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1) contrast(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        .slide:hover img {
+            transform: scale(1.02);
+        }
+
+        .slide-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Controls */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 20px;
+        }
+
+        .carousel-control {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            color: var(--neon-primary);
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-control::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .carousel-control:hover::before {
+            left: 100%;
+        }
+
+        .carousel-control:hover {
+            border-color: var(--neon-primary);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4), 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Dots */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            background: rgba(0, 240, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dot.active {
+            background: var(--neon-primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: var(--neon-secondary);
+            transform: scale(1.1);
+        }
+
+        /* Thumbnails */
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 20px;
+            padding: 40px;
+            background: rgba(19, 21, 31, 0.4);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.15);
+        }
+
+        .thumbnail {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 3px solid rgba(0, 240, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .thumbnail:hover::before {
+            opacity: 1;
+        }
+
+        .thumbnail:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--neon-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .thumbnail.active {
+            border-color: var(--neon-secondary);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 0, 214, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            color: var(--text-color);
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-1), var(--neon-primary), var(--neon-secondary));
+            box-shadow: 0 0 10px var(--neon-primary);
+        }
+
+        .footer-content {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .footer-highlight {
+            color: var(--neon-primary);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .carousel-container {
+                margin: 0 10px 40px;
+            }
+            
+            .carousel {
+                height: 500px;
+            }
+
+            .slide {
+                padding: 20px;
+            }
+            
+            .app-description {
+                font-size: 1rem;
+                padding: 30px 25px;
+            }
+            
+            .thumbnail {
+                width: 100px;
+                height: 100px;
+            }
+
+            .carousel-control {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 40px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel {
+                height: 400px;
+            }
+
+            .thumbnail {
+                width: 80px;
+                height: 80px;
+            }
+
+            .app-logo {
+                width: 100px;
+                height: 100px;
+                font-size: 36px;
+            }
+        }
+
+        /* Loading animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom cursor -->
+    <div id="cursor"></div>
+    
+    <!-- Scanline effect -->
+    <div class="scanlines"></div>
+    <!-- Background elements -->
+    <div class="bg-grid"></div>
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <header>
+         <!-- Back button -->
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to About
+    </a>
+        <div class="app-logo">
+            <img src="images/butracker.png" alt="BuTracker Logo" style="width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 0 20px #00F0FF;">
+        </div>
+        <h1>BuTracker <span class="version">v1.0</span></h1>
+        <p class="subtitle">Next-Gen Budget Management</p>
+        <p class="tagline">Experience the future of personal finance with cutting-edge design and intelligent tracking</p>
+    </header>
+
+    <div class="container">
+        <section class="app-info fade-in">
+            <h2>Explore the Interface</h2>
+            <div class="app-description">
+                Welcome to <span class="highlight">BuTracker</span> App! Here you can explore screenshots showcasing the key features
+                and beautiful interfaces of my application. Navigate through the images to see what makes
+                my app special.
+            </div>
+        </section>
+
+        <div class="carousel-container fade-in">
+            <div class="carousel" id="carousel">
+                <div class="slide">
+                    <img src="images/onboard.jpg" alt="Onboard Screen">
+                    <div class="slide-info">ONBOARD EXPERIENCE</div>
+                </div>
+                <div class="slide">
+                    <img src="images/signin.jpg" alt="Login Screen">
+                    <div class="slide-info">SECURE LOGIN</div>
+                </div>
+                <div class="slide">
+                    <img src="images/home.jpg" alt="Home Screen">
+                    <div class="slide-info">COMMAND CENTER</div>
+                </div>
+                <div class="slide">
+                    <img src="images/Transaction.jpg" alt="Transaction Screen">
+                    <div class="slide-info">TRANSACTION HUB</div>
+                </div>
+                <div class="slide">
+                    <img src="images/AddTransaction.jpg" alt="Add Transaction Screen">
+                    <div class="slide-info">ADD TRANSACTION</div>
+                </div>
+                <div class="slide">
+                    <img src="images/Data.jpg" alt="Data Screen">
+                    <div class="slide-info">DATA ANALYTICS</div>
+                </div>
+                <div class="slide">
+                    <img src="images/expense.jpg" alt="Expense Breakdown Screen">
+                    <div class="slide-info">EXPENSE MATRIX</div>
+                </div>
+                <div class="slide">
+                    <img src="images/ProfileScreen.jpg" alt="Profile Screen">
+                    <div class="slide-info">USER PROFILE</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-controls fade-in">
+            <button class="carousel-control" id="prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-control" id="next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="dots-container fade-in" id="dots-container"></div>
+
+        <div class="thumbnail-container fade-in" id="thumbnail-container">
+            <!-- Thumbnails are created dynamically in JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+          <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+          <div class="social-links">
+            <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+          </div>
+      </footer>
+        <style>
+          footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            font-family: 'Rajdhani', sans-serif;
+          }
+      
+          .social-links a {
+            margin: 0 10px;
+            color: var(--neon-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+          }
+      
+          .social-links a:hover {
+            color: var(--neon-secondary);
+          }
+        </style>
+
+    <script>
+        // Custom cursor effect
+        const cursor = document.getElementById('cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // Change cursor on hover over interactive elements
+        document.querySelectorAll('button, .thumbnail, .dot').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.borderColor = '#FF00D6';
+                cursor.style.boxShadow = '0 0 15px #FF00D6, 0 0 5px #FF00D6';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.borderColor = '#00F0FF';
+                cursor.style.boxShadow = '0 0 15px #00F0FF, 0 0 5px #00F0FF';
+            });
+        });
+
+        // Carousel Functionality
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const dotsContainer = document.getElementById('dots-container');
+        const thumbnailContainer = document.getElementById('thumbnail-container');
+        
+        let currentIndex = 0;
+        let slides = document.querySelectorAll('.slide');
+        
+        // Initialize carousel
+        function initCarousel() {
+            slides = document.querySelectorAll('.slide');
+            createDots();
+            createThumbnails();
+            showSlide(currentIndex);
+        }
+        
+        // Create dots based on number of slides
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < slides.length; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => {
+                    showSlide(i);
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+        
+        // Create thumbnails for each slide
+        function createThumbnails() {
+            thumbnailContainer.innerHTML = '';
+            slides.forEach((slide, index) => {
+                const img = slide.querySelector('img');
+                const thumbnail = document.createElement('img');
+                thumbnail.src = img.src;
+                thumbnail.alt = `Thumbnail ${index + 1}`;
+                thumbnail.classList.add('thumbnail');
+                if (index === currentIndex) {
+                    thumbnail.classList.add('active');
+                }
+                
+                thumbnail.addEventListener('click', () => {
+                    showSlide(index);
+                });
+                
+                thumbnailContainer.appendChild(thumbnail);
+            });
+        }
+        
+        // Show specific slide
+        function showSlide(index) {
+            if (index < 0) {
+                currentIndex = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentIndex = 0;
+            } else {
+                currentIndex = index;
+            }
+            
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update active dot
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === currentIndex);
+            });
+        }
+        
+        // Event listeners for carousel controls
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentIndex - 1);
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            showSlide(currentIndex + 1);
+        });
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                showSlide(currentIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                showSlide(currentIndex + 1);
+            }
+        });
+        
+        // Auto-advance carousel
+        let autoSlideInterval;
+        
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                showSlide(currentIndex + 1);
+            }, 6000);
+        }
+        
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+        
+        // Pause auto-slide when hovering over carousel
+        carousel.addEventListener('mouseenter', stopAutoSlide);
+        carousel.addEventListener('mouseleave', startAutoSlide);
+        
+        // Initialize on load with entrance animations
+        window.addEventListener('load', () => {
+            initCarousel();
+            startAutoSlide();
+            
+            // Trigger fade-in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.animationDelay = `${index * 0.2}s`;
+                    element.classList.add('fade-in');
+                }, 100);
+            });
+        });
+
+        // Parallax effect for background shapes
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                const xMove = (x - 0.5) * speed * 20;
+                const yMove = (y - 0.5) * speed * 20;
+                shape.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

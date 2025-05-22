@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - AMIR.DEV</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+    
+    :root {
+      --bg-primary: #0A0E17;  
+      --bg-secondary: #13151F;
+      --neon-primary: #00F0FF;
+      --neon-secondary: #FF00D6;
+      --accent-1: #7B00FF;
+      --accent-2: #00FF66;
+      --text-color: #E0E0E8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Custom cursor */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid var(--neon-primary);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, border-color 0.3s ease;
+      box-shadow: 0 0 15px var(--neon-primary), 0 0 5px var(--neon-primary);
+    }
+    
+    /* Scanline effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scanline 6s linear infinite;
+      opacity: 0.2;
+    }
+    
+    @keyframes scanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    /* Header Styling */
+    header {
+      padding: 1.5rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background-color: rgba(10, 14, 23, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    
+    .logo span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a.active {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--neon-primary);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--neon-primary);
+    }
+    
+    .nav-links a:hover {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:hover:after,
+    .nav-links a.active:after {
+      width: 100%;
+    }
+
+    /* Portfolio Section */
+    .portfolio {
+      padding: 120px 0 80px;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .portfolio-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .portfolio-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: var(--text-color);
+      position: relative;
+      display: inline-block;
+    }
+
+    .portfolio-title span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.7);
+    }
+
+    .portfolio-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Filter Buttons */
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      color: var(--text-color);
+      padding: 12px 30px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      border-color: var(--neon-primary);
+      color: var(--bg-primary);
+      background-color: var(--neon-primary);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .portfolio-item {
+      background: linear-gradient(145deg, rgba(19, 21, 31, 0.8), rgba(10, 14, 23, 0.9));
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.5s ease;
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 240, 255, 0.3);
+      border-color: var(--neon-primary);
+    }
+
+    .portfolio-item:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(0, 240, 255, 0.1) 0%, 
+        transparent 30%, 
+        transparent 70%, 
+        rgba(255, 0, 214, 0.1) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .portfolio-item:hover:before {
+      opacity: 1;
+    }
+
+    .item-image {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-secondary);
+    }
+
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .portfolio-item:hover .item-image img {
+      transform: scale(1.1);
+    }
+
+    .item-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+        rgba(0, 240, 255, 0.8) 0%, 
+        rgba(255, 0, 214, 0.8) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      z-index: 2;
+    }
+    .item-overlay a {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .item-overlay a:hover {
+      color: var(--neon-primary);
+      transform: scale(1.2);
+    }
+    .item-overlay i {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .item-overlay i:hover {
+      color: var(--neon-primary);
+      transform: scale(1.2);
+    }
+    .item-overlay .overlay-btn {
+      background: rgba(0, 240, 255, 0.2);
+      border-radius: 50%;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .item-overlay .overlay-btn:hover {
+      background: var(--neon-primary);
+      color: var(--bg-primary);
+      transform: scale(1.1);
+    }
+    .item-overlay .overlay-btn i {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .portfolio-item:hover .item-overlay {
+      opacity: 1;
+    }
+
+    .overlay-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+    }
+
+    .overlay-btn:hover {
+      background: white;
+      color: var(--bg-primary);
+      transform: scale(1.1);
+    }
+
+    .item-content {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+    }
+
+    .item-category {
+      background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .item-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-color);
+      line-height: 1.3;
+    }
+
+    .item-description {
+      color: rgba(224, 224, 232, 0.8);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .item-tag {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--neon-primary);
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .portfolio-item:hover .item-tag {
+      background: var(--neon-primary);
+      color: var(--bg-primary);
+      border-color: var(--bg-primary);
+    }
+
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .item-date {
+      font-size: 0.85rem;
+      color: rgba(224, 224, 232, 0.6);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .item-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-completed {
+      background: rgba(0, 255, 102, 0.2);
+      color: var(--accent-2);
+      border: 1px solid var(--accent-2);
+    }
+
+    .status-ongoing {
+      background: rgba(255, 165, 0, 0.2);
+      color: #FFA500;
+      border: 1px solid #FFA500;
+    }
+
+    .status-published {
+      background: rgba(0, 240, 255, 0.2);
+      color: var(--neon-primary);
+      border: 1px solid var(--neon-primary);
+    }
+
+    /* Background Effects */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    .bg-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+      filter: blur(120px);
+    }
+
+    .shape-1 {
+      top: 10%;
+      left: 10%;
+      width: 600px;
+      height: 600px;
+      background: var(--neon-primary);
+      animation: float 25s ease-in-out infinite;
+    }
+
+    .shape-2 {
+      bottom: 20%;
+      right: 15%;
+      width: 500px;
+      height: 500px;
+      background: var(--neon-secondary);
+      animation: float 20s ease-in-out infinite reverse;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      height: 400px;
+      background: var(--accent-1);
+      animation: float 30s ease-in-out infinite;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    /* Filter Animation */
+    .portfolio-item.hide {
+      opacity: 0;
+      transform: scale(0.8);
+      pointer-events: none;
+    }
+
+     /* Footer */
+     footer {
+      text-align: center;
+      padding: 40px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+      border-top: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    .footer-links a {
+      margin: 0 15px;
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      color: var(--neon-secondary);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .portfolio-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      }
+    }
+    @media (max-width: 992px) {
+      .portfolio-title {
+        font-size: 2.5rem;
+      }
+      
+      .filter-buttons {
+        gap: 15px;
+      }
+      
+      .filter-btn {
+        padding: 10px 25px;
+        font-size: 0.95rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .portfolio-title {
+        font-size: 2.2rem;
+      }
+      
+      .filter-buttons {
+        gap: 10px;
+      }
+      
+      .filter-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .item-content {
+        padding: 20px;
+      }
+      
+      .portfolio-title {
+        font-size: 1.8rem;
+      }
+      
+      .filter-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  
+  <!-- Scanline effect -->
+  <div class="scanlines"></div>
+  
+  <!-- Background elements -->
+  <div class="bg-grid"></div>
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo">Amir<span>.</span></a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="portfolio.html" class="active">Portfolio</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+
+  <!-- Portfolio Section -->
+<section class="portfolio">
+  <div class="container">
+    <div class="portfolio-header">
+      <h1 class="portfolio-title">My <span>Portfolio</span></h1>
+      <p class="portfolio-subtitle">Showcasing my work in embedded systems, mobile development, research, and innovation</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="projects">Projects</button>
+      <button class="filter-btn" data-filter="research">Research Papers</button>
+      <button class="filter-btn" data-filter="certificates">Certificates</button>
+      <button class="filter-btn" data-filter="patents">Patents</button>
+    </div>
+
+    <!-- Portfolio Grid -->
+    <div class="portfolio-grid">
+      <!-- Projects -->
+      <article class="portfolio-item" data-category="projects">
+        <div class="item-image">
+          <img src="images/butracker.jpeg" loading="lazy" alt="Budget Tracker App Screenshot" />
+          <div class="item-overlay">
+            <a href="myapps.html" class="overlay-btn" title="View Project"><i class="fas fa-eye"></i></a>
+            <a href="https://github.com/amirphiladam2/budget-tracker" class="overlay-btn" title="View on GitHub" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Mobile Development</span>
+          <h3 class="item-title">Budget Tracker App</h3>
+          <p class="item-description">A comprehensive mobile application for personal finance management with real-time analytics, budget planning, and expense tracking capabilities built with React Native.</p>
+          <div class="item-tags">
+            <span class="item-tag">React Native</span>
+            <span class="item-tag">Firebase</span>
+            <span class="item-tag">Expo</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Dec 2024</span>
+            <span class="item-status status-completed">Completed</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="portfolio-item" data-category="projects">
+        <div class="item-image">
+          <img src="images/wireless.jpg" loading="lazy" alt="LoRa Wireless Sensor Network Diagram" />
+          <div class="item-overlay">
+            <a href="https://techtacklenerd.blogspot.com/2024/10/introduction-in-this-project-ill-show.html" class="overlay-btn" title="View Project Details"><i class="fas fa-eye"></i></a>
+            <a href="https://github.com/amirphiladam2/Wireless-Sensor-Network-With-LoRa" class="overlay-btn" title="View on GitHub" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Embedded Systems</span>
+          <h3 class="item-title">Wireless Sensor Network with LoRa</h3>
+          <p class="item-description">Long-range wireless communication system using LoRa technology for IoT applications with multi-sensor data collection and real-time monitoring.</p>
+          <div class="item-tags">
+            <span class="item-tag">LoRa</span>
+            <span class="item-tag">ESP32</span>
+            <span class="item-tag">ESP8266</span>
+            <span class="item-tag">C++</span>
+            <span class="item-tag">IoT</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Oct 2024</span>
+            <span class="item-status status-completed">Completed</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="portfolio-item" data-category="projects">
+        <div class="item-image">
+          <img src="images/alexagoogle.jpeg" loading="lazy" alt="Smart Home Automation using Alexa and Google Assistant" />
+          <div class="item-overlay">
+            <a href="https://techtacklenerd.blogspot.com/2023/07/led-control-using-alexa-and-google-home.html" class="overlay-btn" title="View Project Details"><i class="fas fa-eye"></i></a>
+            <a href="https://github.com/amirphiladam2/smart-home" class="overlay-btn" title="View on GitHub" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">IoT Development</span>
+          <h3 class="item-title">Smart Home Automation System</h3>
+          <p class="item-description">Integrated home automation system using Alexa and Google Assistant for voice control, with custom hardware interfaces and mobile app control.</p>
+          <div class="item-tags">
+            <span class="item-tag">Sinric Pro</span>
+            <span class="item-tag">Alexa</span>
+            <span class="item-tag">ESP32</span>
+            <span class="item-tag">Google Assistant</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Jul 2023</span>
+            <span class="item-status status-completed">Completed</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="portfolio-item" data-category="projects">
+        <div class="item-image">
+          <img src="images/swiftp.jpg" loading="lazy" alt="SwiftParcel E-commerce App Screenshot" />
+          <div class="item-overlay">
+            <a href="#" class="overlay-btn" title="View Project Details"><i class="fas fa-eye"></i></a>
+            <a href="https://github.com/amirphiladam2/swiftparcel" class="overlay-btn" title="View on GitHub" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Mobile Development</span>
+          <h3 class="item-title">SwiftParcel E-commerce Platform</h3>
+          <p class="item-description">Full-featured e-commerce mobile application with vendor management, payment integration, and real-time order tracking system.</p>
+          <div class="item-tags">
+            <span class="item-tag">React Native</span>
+            <span class="item-tag">Node.js</span>
+            <span class="item-tag">MongoDB</span>
+            <span class="item-tag">Stripe</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Sep 2024</span>
+            <span class="item-status status-ongoing">Ongoing</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Research -->
+      <article class="portfolio-item" data-category="research">
+        <div class="item-image">
+          <img src="images/dispersion.png" loading="lazy" alt="Optical Fiber Dispersion Simulation" />
+          <div class="item-overlay">
+            <a href="#" class="overlay-btn" title="View Research Paper"><i class="fas fa-file-pdf"></i></a>
+            <a href="https://doi.org/example" class="overlay-btn" title="View Publication" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Research Paper</span>
+          <h3 class="item-title">Dispersion in Fiber Optics: Simulation & Analysis</h3>
+          <p class="item-description">A comprehensive study on the simulation and analysis of dispersion effects in fiber optic communication systems.</p>
+          <div class="item-tags">
+            <span class="item-tag">DCF</span>
+            <span class="item-tag">MATLAB</span>
+            <span class="item-tag">SSFM</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">April 2025</span>
+            <span class="item-status status-ongoing">Under Review</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Certificates -->
+      <article class="portfolio-item" data-category="certificates">
+        <div class="item-image">
+          <img src="images/meta.png" loading="lazy" alt="Meta HTML and CSS Certificate" />
+          <div class="item-overlay">
+            <a href="#" class="overlay-btn" title="View Certificate"><i class="fas fa-certificate"></i></a>
+            <a href="https://www.coursera.org/account/accomplishments/verify/NFCH418YUJFA" class="overlay-btn" title="Verify Certificate" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Web Development</span>
+          <h3 class="item-title">HTML & CSS in Depth by Meta</h3>
+          <p class="item-description">In-depth exploration of HTML5 and CSS3 features, including responsive design techniques and modern layout practices.</p>
+          <div class="item-tags">
+            <span class="item-tag">Web Development</span>
+            <span class="item-tag">HTML5</span>
+            <span class="item-tag">CSS3</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Feb 2025</span>
+            <span class="item-status status-completed">Certified</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="portfolio-item" data-category="certificates">
+        <div class="item-image">
+          <img src="images/react.png" loading="lazy" alt="React Native Certification" />
+          <div class="item-overlay">
+            <a href="#" class="overlay-btn" title="View Certificate"><i class="fas fa-certificate"></i></a>
+            <a href="https://www.coursera.org/account/accomplishments/verify/NFCH418YUJFA" class="overlay-btn" title="Verify Certificate" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">Mobile Development</span>
+          <h3 class="item-title">React Native: Mobile Development using (CLI)</h3>
+          <p class="item-description">Certification in advanced React Native development, performance optimization, and mobile application architecture using CLI workflow.</p>
+          <div class="item-tags">
+            <span class="item-tag">React Native</span>
+            <span class="item-tag">Mobile Development</span>
+            <span class="item-tag">JavaScript</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">April 2025</span>
+            <span class="item-status status-ongoing">Ongoing</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="portfolio-item" data-category="certificates">
+        <div class="item-image">
+          <img src="images/ux.png" loading="lazy" alt="User Experience Design Certificate" />
+          <div class="item-overlay">
+            <a href="#" class="overlay-btn" title="View Certificate"><i class="fas fa-certificate"></i></a>
+            <a href="https://www.coursera.org/account/accomplishments/verify/Y86Z1ORV4TJ7" class="overlay-btn" title="Verify Certificate" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+        <div class="item-content">
+          <span class="item-category">UI/UX Design</span>
+          <h3 class="item-title">Foundation of User Experience (UX) Design</h3>
+          <p class="item-description">A practical certification exploring user-centric design principles, usability testing, wireframing, and user interface feedback in modern digital products.</p>
+          <div class="item-tags">
+            <span class="item-tag">UI Design</span>
+            <span class="item-tag">UX Research</span>
+            <span class="item-tag">Figma</span>
+          </div>
+          <div class="item-meta">
+            <span class="item-date">Mar 2025</span>
+            <span class="item-status status-completed">Certified</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
+<!-- JavaScript Filtering -->
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+      document.querySelectorAll('.portfolio-item').forEach(item => {
+        item.style.display = (filter === 'all' || item.dataset.category === filter) ? 'block' : 'none';
+      });
+
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>

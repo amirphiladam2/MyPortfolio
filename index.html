@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMIR.DEV // Embedded Systems & React Native Engineer</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+    
+    :root {
+      --bg-primary: #0A0E17;  
+      --bg-secondary: #13151F;
+      --neon-primary: #00F0FF;
+      --neon-secondary: #FF00D6;
+      --accent-1: #7B00FF;
+      --accent-2: #00FF66;
+      --text-color: #E0E0E8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Custom cursor */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid var(--neon-primary);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, border-color 0.3s ease;
+      box-shadow: 0 0 15px var(--neon-primary), 0 0 5px var(--neon-primary);
+    }
+    
+    /* Scanline effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scanline 6s linear infinite;
+      opacity: 0.2;
+    }
+    
+    @keyframes scanline {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 0 100%;
+      }
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    /* Header Styling */
+    header {
+      padding: 1.5rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background-color: rgba(10, 14, 23, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    
+    .logo span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a.active {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--neon-primary);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--neon-primary);
+    }
+    
+    .nav-links a:hover {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:hover:after,
+    .nav-links a.active:after {
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .hero-content {
+      z-index: 3;
+    }
+    
+    .hero-content h5 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      letter-spacing: 1px;
+    }
+    
+    .hero-content h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: white;
+    }
+    
+    .hero-content h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .hero-content h2 span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      margin-left: 0.5rem;
+    }
+    
+    .hero-content p {
+      margin-bottom: 2rem;
+      max-width: 500px;
+      color: var(--text-color);
+      font-size: 1.1rem;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+    
+    .social-icon:hover {
+      background-color: var(--neon-primary);
+      color: var(--bg-primary);
+      box-shadow: 0 0 15px var(--neon-primary);
+      transform: translateY(-3px);
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: transparent;
+      color: var(--neon-primary);
+      border: 2px solid var(--neon-primary);
+      padding: 12px 30px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 30px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .cta-button:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--neon-primary);
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    
+    .cta-button:hover {
+      color: var(--bg-primary);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+    
+    .cta-button:hover:before {
+      transform: scaleX(1);
+    }
+    
+    /* Hero Image */
+    .hero-image {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hexagon-wrap {
+      position: relative;
+      width: 400px;
+      height: 460px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hexagon {
+      position: relative;
+      width: 350px;
+      height: 400px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background-color: var(--bg-secondary);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 3px solid var(--neon-primary);
+      box-shadow: 0 0 30px var(--neon-primary);
+    }
+    
+    .hexagon:after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, 
+        transparent 40%, 
+        rgba(0, 240, 255, 0.5) 45%, 
+        rgba(0, 240, 255, 0.8) 50%, 
+        rgba(0, 240, 255, 0.5) 55%, 
+        transparent 60%
+      );
+      animation: shine 3s infinite;
+    }/* Projects Preview Section */
+    .projects-preview {
+        padding: 100px 0;
+        background-color: var(--bg-secondary);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      
+      .section-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--text-color);
+        position: relative;
+        display: inline-block;
+      }
+      
+      .section-title span {
+        color: var(--neon-primary);
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      }
+      
+      .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        opacity: 0.8;
+      }
+      
+      .project-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+      
+      .project-card {
+        background-color: rgba(10, 14, 23, 0.7);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(0, 240, 255, 0.1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 240, 255, 0.3);
+        border-color: var(--neon-primary);
+      }
+      
+      .project-image {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+      
+      .project-card:hover .project-image img {
+        transform: scale(1.1);
+      }
+      
+      .project-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+      
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+      
+      .project-tags span {
+        background-color: rgba(0, 240, 255, 0.1);
+        color: var(--neon-primary);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 240, 255, 0.3);
+      }
+      
+      .project-card:hover .project-tags span {
+        background-color: var(--neon-primary);
+        color: var(--bg-primary);
+        border-color: var(--bg-primary);
+      }
+      .project-links {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+      }
+      .project-link {
+        background-color: var(--neon-primary);
+        color: var(--bg-primary);
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .project-link:hover {
+        background-color: var(--bg-secondary);
+        color: var(--neon-primary);
+        box-shadow: 0 0 15px var(--neon-primary);
+      }
+      .more-projects {
+        text-align: center;
+      }
+
+    
+    @keyframes shine {
+      0% {
+        transform: translateX(-300px) translateY(-300px);
+      }
+      100% {
+        transform: translateX(300px) translateY(300px);
+      }
+    }
+    
+    .hexagon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+    
+    .hexagon:before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(135deg, var(--neon-primary), var(--neon-secondary), var(--accent-1), var(--accent-2));
+      z-index: -1;
+      filter: blur(10px);
+      animation: borderGlow 10s linear infinite;
+    }
+    
+    .hex-spinner {
+      position: absolute;
+      width: 140%;
+      height: 140%;
+      top: -20%;
+      left: -20%;
+      background-image: conic-gradient(
+        transparent 0deg,
+        transparent 60deg, 
+        rgba(0, 240, 255, 0.8) 120deg,
+        transparent 180deg,
+        transparent 240deg,
+        rgba(255, 0, 214, 0.8) 300deg,
+        transparent 360deg
+      );
+      animation: rotate 8s linear infinite;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    @keyframes borderGlow {
+      0% {
+        filter: hue-rotate(0deg) blur(10px);
+      }
+      100% {
+        filter: hue-rotate(360deg) blur(10px);
+      }
+    }
+    
+    /* Background Effects */
+    .bg-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      background-position: center;
+      z-index: 1;
+      transform: perspective(1000px) rotateX(60deg) scale(3);
+      transform-origin: center bottom;
+      opacity: 0.2;
+    }
+    
+    .bg-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+      filter: blur(100px);
+    }
+    
+    .shape-1 {
+      top: 20%;
+      left: 5%;
+      width: 500px;
+      height: 500px;
+      background-color: var(--neon-primary);
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .shape-2 {
+      bottom: 10%;
+      right: 5%;
+      width: 400px;
+      height: 400px;
+      background-color: var(--neon-secondary);
+      animation: float 15s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+      50% {
+        transform: translate(30px, 30px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+    
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-image {
+        grid-row: 1;
+        margin-bottom: 2rem;
+      }
+      
+      .hero-content {
+        grid-row: 2;
+        text-align: center;
+      }
+      
+      .hero-content p {
+        margin-right: auto;
+        margin-left: auto;
+      }
+      
+      .social-icons {
+        justify-content: center;
+      }
+      
+      .hexagon-wrap {
+        width: 300px;
+        height: 345px;
+      }
+      
+      .hexagon {
+        width: 260px;
+        height: 300px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.4rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  
+  <!-- Scanline effect -->
+  <div class="scanlines"></div>
+  
+  <!-- Particle background -->
+  <canvas id="particles"></canvas>
+  
+  <!-- Background elements -->
+  <div class="bg-grid"></div>
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
+  
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="logo">Amir<span>.</span></a>
+        <div class="nav-links">
+          <a href="index.html" class="active">Home</a>
+          <a href="about.html">About</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h5>Hello, It's Me</h5>
+          <h1>Amir P.Adam</h1>
+          <h2><span id="changing-text"></span></h2>
+          <p>Pre-Final Year ECE undergrad transforming ideas into digital experiences with a focus on Embedded Systems and mobile applications development using React Native.</p>
+
+          <div class="social-icons">
+            <a href="https://github.com/amirphiladam2" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/amir-philip-29872524b/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/amirp_2808/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://x.com/amirphiladam" class="social-icon"><i class="fab fa-twitter"></i></a>
+          </div>
+          
+          <a href="resume.html" class="cta-button">Download CV</a>
+        </div>
+        
+        <div class="hero-image">
+          <div class="hexagon-wrap">
+            <div class="hex-spinner"></div>
+            <div class="hexagon">
+              <img src="images/dp.jpg" alt="Amir Profile" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projects Preview Section -->
+  <section class="projects-preview">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <p class="section-subtitle">Check out some of my recent work</p>
+      </div>
+      
+      <div class="project-cards">
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/onboard.jpg" alt="Finance Tracker App" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>React Native</span>
+              <span>Firebase</span>
+            </div>
+            <h3>Finance Tracker App</h3>
+            <p>A mobile application for tracking personal finances with visualization and budget planning.</p>
+            <div class="project-links">
+              <a href="myapps.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/wireless.jpg" alt="E-Commerce App" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>LoRa</span>
+              <span>ESP32</span>
+            </div>
+            <h3>Wireless Sensor Network with LoRa</h3>
+            <p>A complete wireless sensor network solution using LoRa technology for long-range communication.</p>
+            <div class="project-links">
+              <a href="https://techtacklenerd.blogspot.com/2024/10/introduction-in-this-project-ill-show.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/alexagoogle.jpeg" alt="Embedded Systems Project" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>C/C++</span>
+              <span>IoT</span>
+            </div>
+            <h3>Smart Home System Using Alexa & Google Controllers</h3>
+            <p>An integrated embedded system for home automation using microcontrollers and IoT technology.</p>
+            <div class="project-links">
+              <a href="https://techtacklenerd.blogspot.com/2023/07/led-control-using-alexa-and-google-home.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="more-projects">
+        <a href="portfolio.html" class="cta-button">View All Projects</a>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    // Custom cursor effect
+    const cursor = document.getElementById('cursor');
+    
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    
+    // Change cursor on hover over links and buttons
+    document.querySelectorAll('a, button').forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        cursor.style.borderColor = '#FF00D6';
+        cursor.style.boxShadow = '0 0 15px #FF00D6, 0 0 5px #FF00D6';
+      });
+      
+      link.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursor.style.borderColor = '#00F0FF';
+        cursor.style.boxShadow = '0 0 15px #00F0FF, 0 0 5px #00F0FF';
+      });
+    });
+    
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.style.backgroundColor = 'rgba(10, 14, 23, 0.95)';
+        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+      } else {
+        header.style.backgroundColor = 'rgba(10, 14, 23, 0.8)';
+        header.style.boxShadow = 'none';
+      }
+    });
+    
+    // Text changing animation
+    const roles = [
+      "I'm an Embedded System Engineer",
+      "And a React Native Developer",
+    ];
+    
+    let roleIndex = 0;
+    const changingText = document.getElementById('changing-text');
+    
+    function typeText(text, element) {
+      let index = 0;
+      element.textContent = "";
+      element.style.borderRight = "2px solid var(--neon-primary)";
+      
+      function type() {
+        if (index < text.length) {
+          element.textContent += text.charAt(index);
+          index++;
+          setTimeout(type, 100);
+        } else {
+          element.style.borderRight = "none";
+          setTimeout(() => {
+            deleteText(element);
+          }, 2000);
+        }
+      }
+      
+      type();
+    }
+    
+    function deleteText(element) {
+      let text = element.textContent;
+      element.style.borderRight = "2px solid var(--neon-primary)";
+      
+      function erase() {
+        if (text.length > 0) {
+          element.textContent = text.slice(0, -1);
+          text = element.textContent;
+          setTimeout(erase, 50);
+        } else {
+          roleIndex = (roleIndex + 1) % roles.length;
+          setTimeout(() => {
+            typeText(roles[roleIndex], element);
+          }, 500);
+        }
+      }
+      
+      erase();
+    }
+    
+    // Start the text animation
+    typeText(roles[roleIndex], changingText);
+    
+    // Particle background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let particlesArray = [];
+    let mouse = {
+      x: null,
+      y: null,
+      radius: 150
+    };
+    
+    window.addEventListener('resize', function() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      init();
+    });
+    
+    window.addEventListener('mousemove', function(event) {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
+    
+    window.addEventListener('mouseout', function() {
+      mouse.x = undefined;
+      mouse.y = undefined;
+    });
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = (Math.random() * 20) + 1;
+        this.color = this.getRandomColor();
+      }
+      
+      getRandomColor() {
+        const colors = [
+          'rgba(0, 240, 255, 0.7)',  // Neon primary
+          'rgba(255, 0, 214, 0.7)',  // Neon secondary
+          'rgba(123, 0, 255, 0.7)',  // Accent 1
+          'rgba(0, 255, 102, 0.7)'   // Accent 2
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+      
+      update() {
+        if (mouse.x != undefined && mouse.y != undefined) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          let forceDirectionX = dx / distance;
+          let forceDirectionY = dy / distance;
+          let maxDistance = mouse.radius;
+          let force = (maxDistance - distance) / maxDistance;
+          
+          if (distance < mouse.radius) {
+            this.x -= forceDirectionX * force * this.density;
+            this.y -= forceDirectionY * force * this.density;
+          } else {
+            if (this.x !== this.baseX) {
+              let dx = this.x - this.baseX;
+              this.x -= dx / 10;
+            }
+            if (this.y !== this.baseY) {
+              let dy = this.y - this.baseY;
+              this.y -= dy / 10;
+            }
+          }
+        } else {
+          if (this.x !== this.baseX) {
+            let dx = this.x - this.baseX;
+            this.x -= dx / 10;
+          }
+          if (this.y !== this.baseY) {
+            let dy = this.y - this.baseY;
+            this.y -= dy / 10;
+          }
+        }
+      }
+    }
+    
+    function init() {
+      particlesArray = [];
+      const numberOfParticles = (width * height) / 15000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    
+    function connect() {
+      let opacityValue = 1;
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          let dx = particlesArray[a].x - particlesArray[b].x;
+          let dy = particlesArray[a].y - particlesArray[b].y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 120) {
+            opacityValue = 1 - (distance / 120);
+            ctx.strokeStyle = `rgba(0, 240, 255, ${opacityValue * 0.2})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, width, height);
+      
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      connect();
+    }
+    
+    init();
+    animate();
+  </script>
+</body>
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+    <div class="social-links">
+      <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+      <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+    </div>
+</footer>
+  <style>
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
+    }
+  </style>
+</html>
