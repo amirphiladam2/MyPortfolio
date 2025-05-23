@@ -158,6 +158,61 @@
     .nav-links a.active:after {
       width: 100%;
     }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 101;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--neon-primary);
+    }
+
+    /* Mobile menu overlay */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(10, 14, 23, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      z-index: 99;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    .mobile-menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a.active {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
     
     /* Hero Section */
     .hero {
@@ -332,7 +387,9 @@
         transparent 60%
       );
       animation: shine 3s infinite;
-    }/* Projects Preview Section */
+    }
+
+    /* Projects Preview Section */
     .projects-preview {
         padding: 100px 0;
         background-color: var(--bg-secondary);
@@ -648,6 +705,44 @@
       .hero-content h2 {
         font-size: 1.4rem;
       }
+      
+      /* Hide desktop nav links and show mobile menu button */
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      /* Mobile menu styles */
+      .mobile-menu {
+        display: flex;
+      }
+
+      /* Adjust project cards for mobile */
+      .project-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
     }
   </style>
 </head>
@@ -679,9 +774,20 @@
           <a href="portfolio.html">Portfolio</a>
           <a href="contact.html">Contact</a>
         </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
       </nav>
     </div>
   </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="active">Home</a>
+    <a href="about.html">About</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="contact.html">Contact</a>
+  </div>
   
   <!-- Hero Section -->
   <section class="hero">
@@ -782,259 +888,62 @@
     </div>
   </section>
   
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+      </div>
+  </footer>
+    <style>
+      footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: var(--bg-secondary);
+        color: var(--text-color);
+        font-family: 'Rajdhani', sans-serif;
+      }
+  
+      .social-links a {
+        margin: 0 10px;
+        color: var(--neon-primary);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+  
+      .social-links a:hover {
+        color: var(--neon-secondary);
+      }
+    </style>
+
   <script>
-    // Custom cursor effect
+    // Custom cursor
     const cursor = document.getElementById('cursor');
-    
     document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      cursor.style.left = `${e.pageX}px`;
+      cursor.style.top = `${e.pageY}px`;
     });
-    
-    // Change cursor on hover over links and buttons
-    document.querySelectorAll('a, button').forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-        cursor.style.borderColor = '#FF00D6';
-        cursor.style.boxShadow = '0 0 15px #FF00D6, 0 0 5px #FF00D6';
-      });
-      
-      link.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        cursor.style.borderColor = '#00F0FF';
-        cursor.style.boxShadow = '0 0 15px #00F0FF, 0 0 5px #00F0FF';
-      });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
     });
-    
-    // Header scroll effect
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 50) {
-        header.style.backgroundColor = 'rgba(10, 14, 23, 0.95)';
-        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
-      } else {
-        header.style.backgroundColor = 'rgba(10, 14, 23, 0.8)';
-        header.style.boxShadow = 'none';
-      }
-    });
-    
-    // Text changing animation
-    const roles = [
-      "I'm an Embedded System Engineer",
-      "And a React Native Developer",
-    ];
-    
-    let roleIndex = 0;
+
+    // Changing text effect
     const changingText = document.getElementById('changing-text');
-    
-    function typeText(text, element) {
-      let index = 0;
-      element.textContent = "";
-      element.style.borderRight = "2px solid var(--neon-primary)";
-      
-      function type() {
-        if (index < text.length) {
-          element.textContent += text.charAt(index);
-          index++;
-          setTimeout(type, 100);
-        } else {
-          element.style.borderRight = "none";
-          setTimeout(() => {
-            deleteText(element);
-          }, 2000);
-        }
-      }
-      
-      type();
+    const texts = ['Embedded Systems Engineer', 'React Native Developer', 'Tech Enthusiast'];
+    let index = 0;
+
+    function changeText() {
+      changingText.textContent = texts[index];
+      index = (index + 1) % texts.length;
+      setTimeout(changeText, 3000);
     }
-    
-    function deleteText(element) {
-      let text = element.textContent;
-      element.style.borderRight = "2px solid var(--neon-primary)";
-      
-      function erase() {
-        if (text.length > 0) {
-          element.textContent = text.slice(0, -1);
-          text = element.textContent;
-          setTimeout(erase, 50);
-        } else {
-          roleIndex = (roleIndex + 1) % roles.length;
-          setTimeout(() => {
-            typeText(roles[roleIndex], element);
-          }, 500);
-        }
-      }
-      
-      erase();
-    }
-    
-    // Start the text animation
-    typeText(roles[roleIndex], changingText);
-    
-    // Particle background
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-    let particlesArray = [];
-    let mouse = {
-      x: null,
-      y: null,
-      radius: 150
-    };
-    
-    window.addEventListener('resize', function() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      init();
-    });
-    
-    window.addEventListener('mousemove', function(event) {
-      mouse.x = event.x;
-      mouse.y = event.y;
-    });
-    
-    window.addEventListener('mouseout', function() {
-      mouse.x = undefined;
-      mouse.y = undefined;
-    });
-    
-    class Particle {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 2 + 1;
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.density = (Math.random() * 20) + 1;
-        this.color = this.getRandomColor();
-      }
-      
-      getRandomColor() {
-        const colors = [
-          'rgba(0, 240, 255, 0.7)',  // Neon primary
-          'rgba(255, 0, 214, 0.7)',  // Neon secondary
-          'rgba(123, 0, 255, 0.7)',  // Accent 1
-          'rgba(0, 255, 102, 0.7)'   // Accent 2
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-      }
-      
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.fillStyle = this.color;
-        ctx.fill();
-      }
-      
-      update() {
-        if (mouse.x != undefined && mouse.y != undefined) {
-          let dx = mouse.x - this.x;
-          let dy = mouse.y - this.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          let forceDirectionX = dx / distance;
-          let forceDirectionY = dy / distance;
-          let maxDistance = mouse.radius;
-          let force = (maxDistance - distance) / maxDistance;
-          
-          if (distance < mouse.radius) {
-            this.x -= forceDirectionX * force * this.density;
-            this.y -= forceDirectionY * force * this.density;
-          } else {
-            if (this.x !== this.baseX) {
-              let dx = this.x - this.baseX;
-              this.x -= dx / 10;
-            }
-            if (this.y !== this.baseY) {
-              let dy = this.y - this.baseY;
-              this.y -= dy / 10;
-            }
-          }
-        } else {
-          if (this.x !== this.baseX) {
-            let dx = this.x - this.baseX;
-            this.x -= dx / 10;
-          }
-          if (this.y !== this.baseY) {
-            let dy = this.y - this.baseY;
-            this.y -= dy / 10;
-          }
-        }
-      }
-    }
-    
-    function init() {
-      particlesArray = [];
-      const numberOfParticles = (width * height) / 15000;
-      for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-    
-    function connect() {
-      let opacityValue = 1;
-      for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-          let dx = particlesArray[a].x - particlesArray[b].x;
-          let dy = particlesArray[a].y - particlesArray[b].y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 120) {
-            opacityValue = 1 - (distance / 120);
-            ctx.strokeStyle = `rgba(0, 240, 255, ${opacityValue * 0.2})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-    
-    function animate() {
-      requestAnimationFrame(animate);
-      ctx.clearRect(0, 0, width, height);
-      
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-      }
-      connect();
-    }
-    
-    init();
-    animate();
+
+    changeText();
   </script>
-</body>
-<footer>
-  <div class="container">
-    <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
-    <div class="social-links">
-      <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
-      <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
-    </div>
-</footer>
-  <style>
-    footer {
-      text-align: center;
-      padding: 20px 0;
-      background-color: var(--bg-secondary);
-      color: var(--text-color);
-      font-family: 'Rajdhani', sans-serif;
-    }
-
-    .social-links a {
-      margin: 0 10px;
-      color: var(--neon-primary);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .social-links a:hover {
-      color: var(--neon-secondary);
-    }
-  </style>
-</html>
