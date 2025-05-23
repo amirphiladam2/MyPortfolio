@@ -588,8 +588,13 @@
     }
 
     @media (max-width: 768px) {
+      /* FIXED: Removed display: none; and made nav-links responsive */
       .nav-links {
-        display: none;
+        gap: 1rem; /* Reduced gap for mobile */
+      }
+
+      .nav-links a {
+        font-size: 0.9rem; /* Slightly smaller font */
       }
 
       .page-title {
@@ -603,6 +608,37 @@
       .skills-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    /* Additional mobile optimization */
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 0.5rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 5px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
     }
   </style>
 </head>
@@ -706,7 +742,7 @@
               <span class="skill-tag">Arduino</span>
               <span class="skill-tag">ESP32/ESP8266</span>
               <span class="skill-tag">C/C++</span>
-                <span class="skill-tag">Raspberry Pi</span>
+              <span class="skill-tag">Raspberry Pi</span>
               <span class="skill-tag">IoT</span>
               <span class="skill-tag">LoRa</span>
               <span class="skill-tag">Sensors</span>
@@ -779,6 +815,17 @@
     </div>
   </main>
   
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </footer>
+  
   <script>
     // Custom cursor effect
     const cursor = document.getElementById('cursor');
@@ -802,85 +849,54 @@
         cursor.style.boxShadow = '0 0 15px #00F0FF, 0 0 5px #00F0FF';
       });
     });
-    
-    // Header scroll effect
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 50) {
-        header.style.backgroundColor = 'rgba(10, 14, 23, 0.95)';
-        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
-      } else {
-        header.style.backgroundColor = 'rgba(10, 14, 23, 0.8)';
-        header.style.boxShadow = 'none';
+    // Particle background effect
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particlesArray = [];
+    const numberOfParticles = 100;
+    const colors = ['#00F0FF', '#FF00D6', '#7B00FF', '#00FF66'];
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
       }
-    });
-
-    // Counter animation for stats
-    function animateCounter(element, target) {
-      let current = 0;
-      const increment = target / 100;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        element.textContent = Math.floor(current) + (target === 100 ? '%' : '+');
-      }, 20);
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.size > 0.2) this.size -= 0.1;
+      }
+      
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    function init() {
+      particlesArray = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        particlesArray.push(new Particle(x, y));
+      }
     }
 
-    // Intersection Observer for animations
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (entry.target.classList.contains('stat-number')) {
-            const target = parseInt(entry.target.textContent);
-            animateCounter(entry.target, target);
-          }
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
       });
-    });
-
-    // Observe elements for animation
-    document.querySelectorAll('.stat-card, .skill-category, .timeline-item, .about-text').forEach(element => {
-      element.style.opacity = '0';
-      element.style.transform = 'translateY(20px)';
-        observer.observe(element);
-    });
-    </script>
-</body>
-<footer>
-  <div class="container">
-    <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
-    <div class="social-links">
-      <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
-      <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
-    </div>
-</footer>
-  <style>
-    footer {
-      text-align: center;
-      padding: 20px 0;
-      background-color: var(--bg-secondary);
-      color: var(--text-color);
-      font-family: 'Rajdhani', sans-serif;
+      requestAnimationFrame(animate);
     }
-
-    .social-links a {
-      margin: 0 10px;
-      color: var(--neon-primary);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .social-links a:hover {
-      color: var(--neon-secondary);
-    }
-  </style>
-</html>
-
-<!-- End of HTML -->
- 
+    
