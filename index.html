@@ -183,51 +183,68 @@
       color: var(--neon-primary);
     }
 
-    /* Mobile menu overlay */
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(10, 14, 23, 0.98);
-      backdrop-filter: blur(15px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 3rem;
-      z-index: 99;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
+   /* Mobile menu overlay */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Changed from 100vw to 100% */
+  height: 100vh;
+  background-color: rgba(10, 14, 23, 0.98);
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  z-index: 99;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow: hidden; /* Prevent any potential scrolling */
+}
 
-    .mobile-menu.active {
-      transform: translateX(0);
-    }
+.mobile-menu.active {
+  transform: translateX(0);
+}
 
-    .mobile-menu a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 2rem;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 600;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-transform: uppercase;
-    }
+.mobile-menu a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.5rem; /* Slightly reduced from 2rem */
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem; /* Added padding for better touch targets */
+  width: 100%; /* Ensure full width */
+}
 
-    .mobile-menu a:hover,
-    .mobile-menu a.active {
-      color: var(--neon-primary);
-      text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
-      transform: scale(1.1);
-    }
-    
-    /* Hero Section */
-    .hero {
-      min-height: 100vh;
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  color: var(--neon-primary);
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+  transform: scale(1.1);
+}
+.mobile-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mobile-close-btn:hover {
+  color: var(--neon-primary);
+}
+/* Hero Section */
+.hero {
+  min-height: 100vh;
       display: flex;
       align-items: center;
       padding-top: 60px;
@@ -870,6 +887,13 @@
         font-size: 0.9rem;
       }
     }
+    .mobile-menu-btn {
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .mobile-menu a {
+      font-size: 1.5rem;
+    }
     
     @media (max-width: 480px) {
       .hero-content h1 {
@@ -1063,8 +1087,6 @@
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <script>
     // Add any additional JavaScript functionality here
-  </script>
-  <script>
     // Custom cursor
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', (e) => {
@@ -1090,106 +1112,24 @@
       changingText.textContent = texts[index];
       index = (index + 1) % texts.length;
     }, 2000);
-  </script>
-  <script src="particles.js"></script>
-  <script>
+
     particlesJS.load('particles', 'particles.json', function() {
       console.log('callback - particles.js config loaded');
     });
-  </script>
-  <script>
-    // Particle.js configuration
-    particlesJS('particles', {
-      particles: {
-        number: {
-          value: 80,
-          density: {
-            enable: true,
-            value_area: 800
-          }
-        },
-        color: {
-          value: '#00f0ff'
-        },
-        shape: {
-          type: 'circle',
-          stroke: {
-            width: 0,
-            color: '#000000'
-          },
-          polygon: {
-            nb_sides: 5
-          }
-        },
-        opacity: {
-          value: 0.5,
-          random: false,
-          anim: {
-            enable: false,
-            speed: 1,
-            opacity_min: 0.1,
-            sync: false
-          }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: {
-            enable: false,
-            speed: 40,
-            size_min: 0.1,
-            sync: false
-          }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: '#00f0ff',
-          opacity: 0.4,
-          width: 1
-        },
-        /* Retina Display */
-        retina_detect: true
-        
-      },
-      interactivity: {
-        detect_on: 'canvas',
-        events: {
-          onhover: {
-            enable: true,
-            mode: 'repulse'
-          },
-          onclick: {
-            enable: true,
-            mode: 'push'
-          },
-          resize: true
-        },
-        modes: {
-          grab: {
-            distance: 400,
-            line_linked: {
-              opacity: 1
-            }
-          },
-          bubble: {
-            distance: 400,
-            size: 40,
-            duration: 2,
-            opacity: 8,
-            speed: 3
-          },
-          repulse: {
-            distance: 200,
-            duration: 0.4
-          },
-          push: {
-            particles_nb: 4
-          },
-          remove: {
-            particles_nb: 2
-          }
-        }
-      }
-    });
+  
+    // Update your mobile menu toggle function
+mobileMenuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('active');
+  mobileMenuBtn.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+// Add to your existing JavaScript
+const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+mobileCloseBtn.addEventListener('click', () => {
+  mobileMenu.classList.remove('active');
+});
+mobileCloseBtn.addEventListener('click', () => {
+  mobileMenu.classList.remove('active');
+  document.body.style.overflow = '';
+});
   </script>
