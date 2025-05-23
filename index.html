@@ -102,6 +102,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5%;
     }
     
     .logo {
@@ -165,32 +169,35 @@
       background: none;
       border: none;
       color: var(--text-color);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
       z-index: 101;
+      position: relative;
+      padding: 10px;
     }
 
     .mobile-menu-btn:hover {
       color: var(--neon-primary);
     }
 
-    /* Mobile menu overlay */
+    /* Mobile menu overlay - Fixed positioning and sizing */
     .mobile-menu {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 100vw;
       height: 100vh;
-      background-color: rgba(10, 14, 23, 0.95);
-      backdrop-filter: blur(10px);
+      background-color: rgba(10, 14, 23, 0.98);
+      backdrop-filter: blur(15px);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 2rem;
+      gap: 3rem;
       z-index: 99;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
+      overflow: hidden;
     }
 
     .mobile-menu.active {
@@ -200,18 +207,20 @@
     .mobile-menu a {
       color: var(--text-color);
       text-decoration: none;
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-family: 'Rajdhani', sans-serif;
       font-weight: 600;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       transition: all 0.3s ease;
       text-align: center;
+      text-transform: uppercase;
     }
 
     .mobile-menu a:hover,
     .mobile-menu a.active {
       color: var(--neon-primary);
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+      transform: scale(1.1);
     }
     
     /* Hero Section */
@@ -665,16 +674,12 @@
     @media (max-width: 992px) {
       .hero-grid {
         grid-template-columns: 1fr;
+        text-align: center;
       }
       
       .hero-image {
-        grid-row: 1;
+        order: -1;
         margin-bottom: 2rem;
-      }
-      
-      .hero-content {
-        grid-row: 2;
-        text-align: center;
       }
       
       .hero-content p {
@@ -698,12 +703,28 @@
     }
     
     @media (max-width: 768px) {
-      .hero-content h1 {
-        font-size: 2.5rem;
+      /* Ensure no horizontal overflow */
+      body {
+        max-width: 100vw;
+        overflow-x: hidden;
       }
       
-      .hero-content h2 {
-        font-size: 1.4rem;
+      .container {
+        width: 95%;
+        padding: 1rem 0;
+      }
+      
+      /* Header fixes */
+      header {
+        padding: 1rem 0;
+      }
+      
+      nav {
+        padding: 0 2.5%;
+      }
+      
+      .logo {
+        font-size: 20px;
       }
       
       /* Hide desktop nav links and show mobile menu button */
@@ -714,45 +735,145 @@
       .mobile-menu-btn {
         display: block;
       }
-
-      /* Mobile menu styles */
-      .mobile-menu {
-        position: absolute; /* or fixed depending on your design */
-        top: 100%; /* below the navbar */
-        right: 0;
-        left: 0;
-        background-color: white; /* or your desired background */
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
-        flex-direction: column;
-        align-items: center;
-        z-index: 999;
+      
+      /* Hero content mobile fixes */
+      .hero {
+        padding-top: 80px;
+        min-height: auto;
+        padding-bottom: 2rem;
       }
       
-      /* Adjust project cards for mobile */
+      .hero-content h1 {
+        font-size: 2.2rem;
+        line-height: 1.2;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.3rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .hero-content h2 span {
+        margin-left: 0;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+        max-width: 100%;
+      }
+      
+      /* Projects section mobile fixes */
+      .section-title {
+        font-size: 2rem;
+      }
+      
       .project-cards {
         grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .project-card {
+        margin: 0 auto;
+        max-width: 400px;
+      }
+      
+      /* Hexagon mobile sizing */
+      .hexagon-wrap {
+        width: 250px;
+        height: 290px;
+      }
+      
+      .hexagon {
+        width: 220px;
+        height: 250px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 1.6rem;
+      }
+      
+      .hexagon-wrap {
+        width: 200px;
+        height: 230px;
+      }
+      
+      .hexagon {
+        width: 180px;
+        height: 200px;
+      }
+      
+      .mobile-menu a {
+        font-size: 1.5rem;
+      }
+      
+      .project-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .cta-button {
+        padding: 10px 25px;
+        font-size: 0.9rem;
       }
     }
 
     footer {
       text-align: center;
-      padding: 20px 0;
+      padding: 40px 0;
       background-color: var(--bg-secondary);
       color: var(--text-color);
       font-family: 'Rajdhani', sans-serif;
+      border-top: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    footer p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
     }
 
     .social-links a {
-      margin: 0 10px;
       color: var(--neon-primary);
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 1rem;
     }
 
     .social-links a:hover {
       color: var(--neon-secondary);
+      text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
+    }
+    
+    @media (max-width: 768px) {
+      footer {
+        padding: 30px 0;
+      }
+      
+      .social-links {
+        gap: 1.5rem;
+      }
+      
+      .social-links a {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -775,20 +896,18 @@
   
   <!-- Header -->
   <header>
-    <div class="container">
-      <nav>
-        <a href="#" class="logo">Amir<span>.</span></a>
-        <div class="nav-links">
-          <a href="index.html" class="active">Home</a>
-          <a href="about.html">About</a>
-          <a href="portfolio.html">Portfolio</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-          <i class="fas fa-bars"></i>
-        </button>
-      </nav>
-    </div>
+    <nav>
+      <a href="#" class="logo">Amir<span>.</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
   </header>
 
   <!-- Mobile Menu -->
@@ -806,7 +925,7 @@
         <div class="hero-content">
           <h5>Hello, It's Me</h5>
           <h1>Amir P.Adam</h1>
-          <h2><span id="changing-text"></span></h2>
+          <h2>I'm a <span id="changing-text"></span></h2>
           <p>Pre-Final Year ECE undergrad transforming ideas into digital experiences with a focus on Embedded Systems and mobile applications development using React Native.</p>
 
           <div class="social-icons">
@@ -830,7 +949,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- Projects Preview Section -->
   <section class="projects-preview">
     <div class="container">
