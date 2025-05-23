@@ -162,7 +162,29 @@
     .nav-links a.active:after {
       width: 100%;
     }
-
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+    
+      .nav-links {
+        display: none;
+      }
+    
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    
+      .container, nav, header {
+        max-width: 100%;
+        padding: 0 1rem;
+        box-sizing: border-box;
+      }
+    
+      body, html {
+        overflow-x: hidden;
+      }
+    }
     /* Mobile menu button */
     .mobile-menu-btn {
       display: none;
