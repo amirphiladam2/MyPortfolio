@@ -26,7 +26,7 @@
       box-sizing: border-box;
     }
     
-    body {
+    body,html {
       background-color: var(--bg-primary);
       color: var(--text-color);
       font-family: 'Inter', sans-serif;
@@ -717,9 +717,19 @@
 
       /* Mobile menu styles */
       .mobile-menu {
-        display: flex;
+        position: absolute; /* or fixed depending on your design */
+        top: 100%; /* below the navbar */
+        right: 0;
+        left: 0;
+        background-color: white; /* or your desired background */
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        flex-direction: column;
+        align-items: center;
+        z-index: 999;
       }
-
+      
       /* Adjust project cards for mobile */
       .project-cards {
         grid-template-columns: 1fr;
