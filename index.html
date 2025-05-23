@@ -26,18 +26,16 @@
       box-sizing: border-box;
     }
     
-    body,html {
+    html, body {
       background-color: var(--bg-primary);
       color: var(--text-color);
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
       line-height: 1.6;
-    }
-    nav, header, .container {
+      width: 100%;
       max-width: 100vw;
-      overflow-x: hidden;
-      box-sizing: border-box;
     }
+    
     /* Custom cursor */
     #cursor {
       position: fixed;
@@ -166,30 +164,7 @@
     .nav-links a.active:after {
       width: 100%;
     }
-     
-    @media (max-width: 768px) {
-      .mobile-menu-btn {
-        display: block;
-      }
-    
-      .nav-links {
-        display: none;
-      }
-    
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-    
-      .container, nav, header {
-        max-width: 100%;
-        padding: 0 1rem;
-        box-sizing: border-box;
-      }
-    
-      body, html {
-        overflow-x: hidden;
-      }
-    }
+
     /* Mobile menu button */
     .mobile-menu-btn {
       display: none;
@@ -201,13 +176,14 @@
       z-index: 101;
       position: relative;
       padding: 10px;
+      transition: color 0.3s ease;
     }
 
     .mobile-menu-btn:hover {
       color: var(--neon-primary);
     }
 
-    /* Mobile menu overlay - Fixed positioning and sizing */
+    /* Mobile menu overlay */
     .mobile-menu {
       position: fixed;
       top: 0;
@@ -224,7 +200,6 @@
       z-index: 99;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
-      overflow: hidden;
     }
 
     .mobile-menu.active {
@@ -552,6 +527,50 @@
         color: var(--neon-primary);
         box-shadow: 0 0 15px var(--neon-primary);
       }
+      .project-description {
+        display: none;
+        padding: 15px;
+        background-color: rgba(10, 14, 23, 0.8);
+        border-radius: 12px;
+        margin-top: 15px;
+      }
+      .project-card:hover .project-description {
+        display: block;
+      }
+      .project-footer {
+        padding: 15px;
+        background-color: rgba(10, 14, 23, 0.8);
+        border-radius: 12px;
+        margin-top: auto;
+        text-align: center;
+      }
+      .project-footer p {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.8;
+      }
+      .project-footer p span {
+        color: var(--neon-primary);
+        font-weight: 600;
+      }
+      .project-footer p span:hover {
+        color: var(--neon-secondary);
+        text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
+      }
+      .project-footer p span:hover:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--neon-primary);
+        transition: width 0.3s ease;
+        box-shadow: 0 0 8px var(--neon-primary);
+      }
+      .project-footer p span:hover:after {
+        width: 100%;
+      }
       .more-projects {
         text-align: center;
       }
@@ -696,6 +715,40 @@
       height: 100%;
       z-index: 0;
     }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+      border-top: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    footer p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
+      text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
+    }
     
     /* Responsive Styles */
     @media (max-width: 992px) {
@@ -730,31 +783,23 @@
     }
     
     @media (max-width: 768px) {
-      /* Ensure no horizontal overflow */
-      body {
-        max-width: 100vw;
-        overflow-x: hidden;
-      }
-      
       .container {
         width: 95%;
         padding: 1rem 0;
       }
       
-      /* Header fixes */
       header {
         padding: 1rem 0;
       }
       
       nav {
-        padding: 0 2.5%;
+        padding: 0 5%;
       }
       
       .logo {
         font-size: 20px;
       }
       
-      /* Hide desktop nav links and show mobile menu button */
       .nav-links {
         display: none;
       }
@@ -763,7 +808,6 @@
         display: block;
       }
       
-      /* Hero content mobile fixes */
       .hero {
         padding-top: 80px;
         min-height: auto;
@@ -790,7 +834,6 @@
         max-width: 100%;
       }
       
-      /* Projects section mobile fixes */
       .section-title {
         font-size: 2rem;
       }
@@ -805,7 +848,6 @@
         max-width: 400px;
       }
       
-      /* Hexagon mobile sizing */
       .hexagon-wrap {
         width: 250px;
         height: 290px;
@@ -814,6 +856,18 @@
       .hexagon {
         width: 220px;
         height: 250px;
+      }
+
+      footer {
+        padding: 30px 0;
+      }
+      
+      .social-links {
+        gap: 1.5rem;
+      }
+      
+      .social-links a {
+        font-size: 0.9rem;
       }
     }
     
@@ -851,54 +905,6 @@
       
       .cta-button {
         padding: 10px 25px;
-        font-size: 0.9rem;
-      }
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 0;
-      background-color: var(--bg-secondary);
-      color: var(--text-color);
-      font-family: 'Rajdhani', sans-serif;
-      border-top: 1px solid rgba(0, 240, 255, 0.1);
-    }
-
-    footer p {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .social-links a {
-      color: var(--neon-primary);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .social-links a:hover {
-      color: var(--neon-secondary);
-      text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
-    }
-    
-    @media (max-width: 768px) {
-      footer {
-        padding: 30px 0;
-      }
-      
-      .social-links {
-        gap: 1.5rem;
-      }
-      
-      .social-links a {
         font-size: 0.9rem;
       }
     }
@@ -978,6 +984,7 @@
   </section>
 
   <!-- Projects Preview Section -->
+  < <!-- Projects Preview Section -->
   <section class="projects-preview">
     <div class="container">
       <div class="section-header">
@@ -1044,42 +1051,25 @@
     </div>
   </section>
   
+  <!-- Footer -->
   <footer>
-    <div class="container">
-      <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
-      <div class="social-links">
-        <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
-        <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
-        <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
-      </div>
+    <p>&copy; 2025 Amir P.Adam. All rights reserved.</p>
+    <div class="social-links">
+      <a href="https://github.com/amirphiladam2" class="social-link">GitHub</a>
+      <a href="https://www.linkedin.com/in/amir-phil-adam/" class="social-link">LinkedIn</a>
+      <a href="https://twitter.com/amirphiladam2" class="social-link">Twitter</a>
+    </div>
   </footer>
-    <style>
-      footer {
-        text-align: center;
-        padding: 20px 0;
-        background-color: var(--bg-secondary);
-        color: var(--text-color);
-        font-family: 'Rajdhani', sans-serif;
-      }
-  
-      .social-links a {
-        margin: 0 10px;
-        color: var(--neon-primary);
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-  
-      .social-links a:hover {
-        color: var(--neon-secondary);
-      }
-    </style>
-
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    // Add any additional JavaScript functionality here
+  </script>
   <script>
     // Custom cursor
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.pageX}px`;
-      cursor.style.top = `${e.pageY}px`;
+      cursor.style.left = e.pageX + 'px';
+      cursor.style.top = e.pageY + 'px';
     });
 
     // Mobile menu toggle
@@ -1088,18 +1078,118 @@
 
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
     });
 
     // Changing text effect
     const changingText = document.getElementById('changing-text');
-    const texts = ['Embedded Systems Engineer', 'React Native Developer', 'Tech Enthusiast'];
+    const texts = ['Developer', 'Designer', 'Creator'];
     let index = 0;
 
-    function changeText() {
+    setInterval(() => {
       changingText.textContent = texts[index];
       index = (index + 1) % texts.length;
-      setTimeout(changeText, 3000);
-    }
-
-    changeText();
+    }, 2000);
+  </script>
+  <script src="particles.js"></script>
+  <script>
+    particlesJS.load('particles', 'particles.json', function() {
+      console.log('callback - particles.js config loaded');
+    });
+  </script>
+  <script>
+    // Particle.js configuration
+    particlesJS('particles', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: '#00f0ff'
+        },
+        shape: {
+          type: 'circle',
+          stroke: {
+            width: 0,
+            color: '#000000'
+          },
+          polygon: {
+            nb_sides: 5
+          }
+        },
+        opacity: {
+          value: 0.5,
+          random: false,
+          anim: {
+            enable: false,
+            speed: 1,
+            opacity_min: 0.1,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: {
+            enable: false,
+            speed: 40,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#00f0ff',
+          opacity: 0.4,
+          width: 1
+        },
+        /* Retina Display */
+        retina_detect: true
+        
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: {
+            enable: true,
+            mode: 'repulse'
+          },
+          onclick: {
+            enable: true,
+            mode: 'push'
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 400,
+            line_linked: {
+              opacity: 1
+            }
+          },
+          bubble: {
+            distance: 400,
+            size: 40,
+            duration: 2,
+            opacity: 8,
+            speed: 3
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.4
+          },
+          push: {
+            particles_nb: 4
+          },
+          remove: {
+            particles_nb: 2
+          }
+        }
+      }
+    });
   </script>
