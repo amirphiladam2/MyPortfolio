@@ -15,6 +15,10 @@
       --bg-secondary: #13151F;
       --neon-primary: #00F0FF;
       --neon-secondary: #FF00D6;
+      --red: #FF0000;
+      --blue: #0400ff;
+      --yellow: #ffd000;
+      --green: #00FF00;
       --accent-1: #7B00FF;
       --accent-2: #00FF66;
       --text-color: #E0E0E8;
@@ -598,64 +602,54 @@
         transform: translateX(300px) translateY(300px);
       }
     }
-    
-    .hexagon img {
-      width: 100%;
-      height: 100%;
+    .circle {
+      /* Ensure width and height are equal */
+      width: 400px;
+      height: 400px; /* Must match width */
+      border-radius: 50%; /* This makes it circular */
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image {
+  margin-top: -70px; /* Pulls container upward */
+  margin-bottom: 30px; /* Compensates for the upward shift */
+}
+    .circle img {
+      width: 90%;
+      height: 90%;
       object-fit: cover;
+      border-radius: 50%;
       object-position: top center;
+      /* Add border directly to image */
+      border: 4px solid transparent; /* Invisible border maintains spacing */
+      animation: border-pulse 2s infinite alternate;
+      box-shadow: 0 0 10px var(--neon-primary);
+      
     }
-    
-    .hexagon:before {
-      content: '';
-      position: absolute;
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      background: linear-gradient(135deg, var(--neon-primary), var(--neon-secondary), var(--accent-1), var(--accent-2));
-      z-index: -1;
-      filter: blur(10px);
-      animation: borderGlow 10s linear infinite;
-    }
-    
-    .hex-spinner {
-      position: absolute;
-      width: 140%;
-      height: 140%;
-      top: -20%;
-      left: -20%;
-      background-image: conic-gradient(
-        transparent 0deg,
-        transparent 60deg, 
-        rgba(0, 240, 255, 0.8) 120deg,
-        transparent 180deg,
-        transparent 240deg,
-        rgba(255, 0, 214, 0.8) 300deg,
-        transparent 360deg
-      );
-      animation: rotate 8s linear infinite;
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    }
-    
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
+    @media (max-width: 768px) {
+      .circle img {
+        border-width: 1.5px; /* Thinner border on mobile */
+        box-shadow: 0 0 8px var(--neon-primary);
       }
     }
     
-    @keyframes borderGlow {
-      0% {
-        filter: hue-rotate(0deg) blur(10px);
+    @keyframes border-pulse {
+      0%, 100% {
+        border-color: var(--neon-primary);
+        box-shadow: 
+          0 0 5px var(--neon-primary),
+          0 0 10px rgba(0, 240, 255, 0.3);
       }
-      100% {
-        filter: hue-rotate(360deg) blur(10px);
+      50% {
+        border-color: var(--neon-secondary);
+        box-shadow: 
+          0 0 10px var(--neon-secondary),
+          0 0 20px rgba(255, 0, 214, 0.4);
       }
     }
-    
+ 
     /* Background Effects */
     .bg-grid {
       position: absolute;
@@ -784,17 +778,42 @@
       .social-icons {
         justify-content: center;
       }
-      
-      .hexagon-wrap {
-        width: 300px;
-        height: 345px;
-      }
-      
-      .hexagon {
-        width: 260px;
-        height: 300px;
-      }
     }
+      @media (max-width: 992px) {
+        .circle-wrap {
+          width: 250px;
+          height: 250px;
+        }
+        
+        .circle {
+          width: 230px;
+          height: 230px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .circle-wrap {
+          width: 200px;
+          height: 200px;
+        }
+        
+        .circle {
+          width: 180px;
+          height: 180px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .circle-wrap {
+          width: 180px;
+          height: 180px;
+        }
+        
+        .circle {
+          width: 160px;
+          height: 160px;
+        }
+      }
     
     @media (max-width: 768px) {
       .container {
@@ -862,16 +881,6 @@
         max-width: 400px;
       }
       
-      .hexagon-wrap {
-        width: 250px;
-        height: 290px;
-      }
-      
-      .hexagon {
-        width: 220px;
-        height: 250px;
-      }
-
       footer {
         padding: 30px 0;
       }
@@ -896,16 +905,6 @@
       
       .section-title {
         font-size: 1.6rem;
-      }
-      
-      .hexagon-wrap {
-        width: 200px;
-        height: 230px;
-      }
-      
-      .hexagon {
-        width: 180px;
-        height: 200px;
       }
       
       .mobile-menu a {
@@ -989,9 +988,9 @@
         </div>
         
         <div class="hero-image">
-          <div class="hexagon-wrap">
-            <div class="hex-spinner"></div>
-            <div class="hexagon">
+          <div class="circle-wrap">
+            <div class="circle-spinner"></div>
+            <div class="circle">
               <img src="images/dp.jpg" alt="Amir Profile" />
             </div>
           </div>
