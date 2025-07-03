@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AMIR.DEV // Embedded Systems & React Native Engineer</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+    
+    :root {
+      --bg-primary: #0A0E17;  
+      --bg-secondary: #13151F;
+      --neon-primary: #00F0FF;
+      --neon-secondary: #FF00D6;
+      --red: #FF0000;
+      --blue: #0400ff;
+      --yellow: #ffd000;
+      --green: #00FF00;
+      --accent-1: #7B00FF;
+      --accent-2: #00FF66;
+      --text-color: #E0E0E8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      background-color: var(--bg-primary);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+
+      line-height: 1.6;
+      min-height: 100%;
+      width: 100%;
+    }
+    body::-webkit-scrollbar {
+      width: 8px;
+    }
+    body::-webkit-scrollbar-thumb {
+      background-color: var(--neon-primary);
+      border-radius: 4px;
+    }
+
+    body::-webkit-scrollbar-thumb:hover {
+      background-color: var(--neon-secondary);
+    }
+
+    /* Custom cursor */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid var(--neon-primary);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, border-color 0.3s ease;
+      box-shadow: 0 0 15px var(--neon-primary), 0 0 5px var(--neon-primary);
+    }
+    
+    /* Scanline effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scanline 6s linear infinite;
+      opacity: 0.2;
+    }
+    
+    @keyframes scanline {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 0 100%;
+      }
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    /* Header Styling */
+    header {
+      padding: 1.5rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background-color: rgba(10, 14, 23, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5%;
+      position: relative;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-color);
+      text-decoration: none;
+      max-width: calc(100% - 60px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .logo span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a.active {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--neon-primary);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--neon-primary);
+    }
+    
+    .nav-links a:hover {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:hover:after,
+    .nav-links a.active:after {
+      width: 100%;
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 101;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: color 0.3s ease;
+      padding: 10px;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--neon-primary);
+    }
+
+    /* Mobile menu overlay - completely revised */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(10, 14, 23, 0.98);
+      backdrop-filter: blur(15px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .mobile-menu.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      width: 100%;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a.active {
+      color: var(--neon-primary);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+    }
+
+    .mobile-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-close-btn:hover {
+      color: var(--neon-primary);
+    }
+    
+    /* Prevent body scrolling when menu is open */
+    body.menu-open {
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .hero-content {
+      z-index: 3;
+    }
+    
+    .hero-content h5 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      letter-spacing: 1px;
+    }
+    
+    .hero-content h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: white;
+    }
+    
+    .hero-content h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .hero-content h2 span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      margin-left: 0.5rem;
+    }
+    
+    .hero-content p {
+      margin-bottom: 2rem;
+      max-width: 500px;
+      color: var(--text-color);
+      font-size: 1.1rem;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+    
+    .social-icon:hover {
+      background-color: var(--neon-primary);
+      color: var(--bg-primary);
+      box-shadow: 0 0 15px var(--neon-primary);
+      transform: translateY(-3px);
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: transparent;
+      color: var(--neon-primary);
+      border: 2px solid var(--neon-primary);
+      padding: 12px 30px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 30px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .cta-button:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--neon-primary);
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    
+    .cta-button:hover {
+      color: var(--bg-primary);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+    
+    .cta-button:hover:before {
+      transform: scaleX(1);
+    }
+    
+    /* Hero Image */
+    .hero-image {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    
+    /* Projects Preview Section */
+    .projects-preview {
+        padding: 100px 0;
+        background-color: var(--bg-secondary);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      
+      .section-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--text-color);
+        position: relative;
+        display: inline-block;
+      }
+      
+      .section-title span {
+        color: var(--neon-primary);
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      }
+      
+      .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        opacity: 0.8;
+      }
+      
+      .project-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+      
+      .project-card {
+        background-color: rgba(10, 14, 23, 0.7);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(0, 240, 255, 0.1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 240, 255, 0.3);
+        border-color: var(--neon-primary);
+      }
+      
+      .project-image {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+      
+      .project-card:hover .project-image img {
+        transform: scale(1.1);
+      }
+      
+      .project-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+      
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+      
+      .project-tags span {
+        background-color: rgba(0, 240, 255, 0.1);
+        color: var(--neon-primary);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 240, 255, 0.3);
+      }
+      
+      .project-card:hover .project-tags span {
+        background-color: var(--neon-primary);
+        color: var(--bg-primary);
+        border-color: var(--bg-primary);
+      }
+      .project-links {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+      }
+      .project-link {
+        background-color: var(--neon-primary);
+        color: var(--bg-primary);
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .project-link:hover {
+        background-color: var(--bg-secondary);
+        color: var(--neon-primary);
+        box-shadow: 0 0 15px var(--neon-primary);
+      }
+      .project-description {
+        display: none;
+        padding: 15px;
+        background-color: rgba(10, 14, 23, 0.8);
+        border-radius: 12px;
+        margin-top: 15px;
+      }
+      .project-card:hover .project-description {
+        display: block;
+      }
+      .project-footer {
+        padding: 15px;
+        background-color: rgba(10, 14, 23, 0.8);
+        border-radius: 12px;
+        margin-top: auto;
+        text-align: center;
+      }
+      .project-footer p {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.8;
+      }
+      .project-footer p span {
+        color: var(--neon-primary);
+        font-weight: 600;
+      }
+      .project-footer p span:hover {
+        color: var(--neon-secondary);
+        text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
+      }
+      .project-footer p span:hover:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--neon-primary);
+        transition: width 0.3s ease;
+        box-shadow: 0 0 8px var(--neon-primary);
+      }
+      .project-footer p span:hover:after {
+        width: 100%;
+      }
+      .more-projects {
+        text-align: center;
+      }
+
+    
+    @keyframes shine {
+      0% {
+        transform: translateX(-300px) translateY(-300px);
+      }
+      100% {
+        transform: translateX(300px) translateY(300px);
+      }
+    }
+    .circle {
+      /* Ensure width and height are equal */
+      width: 400px;
+      height: 400px; /* Must match width */
+      border-radius: 50%; /* This makes it circular */
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image {
+      margin-bottom: 30px; /* Maintains layout spacing */
+    }
+    
+    @media (min-width: 769px) {
+      .hero-image {
+        transform: translateY(-40px); /* Better performance */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-image {
+        transform: none; /* Mobile stays in normal position */
+      }
+    }
+    .circle img {
+      width: 90%;
+      height: 90%;
+      object-fit: cover;
+      border-radius: 50%;
+      object-position: top center;
+      /* Add border directly to image */
+      border: 4px solid transparent; /* Invisible border maintains spacing */
+      animation: border-pulse 2s infinite alternate;
+      box-shadow: 0 0 10px var(--neon-primary);
+      
+    }
+    @media (max-width: 768px) {
+      .circle img {
+        border-width: 1.5px; /* Thinner border on mobile */
+        box-shadow: 0 0 8px var(--neon-primary);
+      }
+    }
+    
+    @keyframes border-pulse {
+      0%, 100% {
+        border-color: var(--neon-primary);
+        box-shadow: 
+          0 0 5px var(--neon-primary),
+          0 0 10px rgba(0, 240, 255, 0.3);
+      }
+      50% {
+        border-color: var(--neon-secondary);
+        box-shadow: 
+          0 0 10px var(--neon-secondary),
+          0 0 20px rgba(255, 0, 214, 0.4);
+      }
+    }
+ 
+    /* Background Effects */
+    .bg-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      background-position: center;
+      z-index: 1;
+      transform: perspective(1000px) rotateX(60deg) scale(3);
+      transform-origin: center bottom;
+      opacity: 0.2;
+    }
+    
+    .bg-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+      filter: blur(100px);
+    }
+    
+    .shape-1 {
+      top: 20%;
+      left: 5%;
+      width: 500px;
+      height: 500px;
+      background-color: var(--neon-primary);
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .shape-2 {
+      bottom: 10%;
+      right: 5%;
+      width: 400px;
+      height: 400px;
+      background-color: var(--neon-secondary);
+      animation: float 15s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+      50% {
+        transform: translate(30px, 30px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+    
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+      border-top: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    footer p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
+      text-shadow: 0 0 10px rgba(255, 0, 214, 0.5);
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .hero-image {
+        order: -1;
+        margin-bottom: 2rem;
+      }
+      
+      .hero-content p {
+        margin-right: auto;
+        margin-left: auto;
+      }
+      
+      .social-icons {
+        justify-content: center;
+      }
+    }
+      @media (max-width: 992px) {
+        .circle-wrap {
+          width: 250px;
+          height: 250px;
+        }
+        
+        .circle {
+          width: 230px;
+          height: 230px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .circle-wrap {
+          width: 200px;
+          height: 200px;
+        }
+        
+        .circle {
+          width: 180px;
+          height: 180px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .circle-wrap {
+          width: 180px;
+          height: 180px;
+        }
+        
+        .circle {
+          width: 160px;
+          height: 160px;
+        }
+      }
+    
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 1rem 0;
+      }
+      
+      header {
+        padding: 1rem 0;
+      }
+      
+      nav {
+        padding: 0 20px;
+      }
+      
+      .logo {
+        font-size: 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .hero {
+        padding-top: 80px;
+        min-height: auto;
+        padding-bottom: 2rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.2rem;
+        line-height: 1.2;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.3rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .hero-content h2 span {
+        margin-left: 0;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+        max-width: 100%;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .project-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .project-card {
+        margin: 0 auto;
+        max-width: 400px;
+      }
+      
+      footer {
+        padding: 30px 0;
+      }
+      
+      .social-links {
+        gap: 1.5rem;
+      }
+      
+      .social-links a {
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 1.6rem;
+      }
+      
+      .mobile-menu a {
+        font-size: 1.5rem;
+      }
+      
+      .project-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .cta-button {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  
+  <!-- Scanline effect -->
+  <div class="scanlines"></div>
+  
+  <!-- Particle background -->
+  <canvas id="particles"></canvas>
+  
+  <!-- Background elements -->
+  <div class="bg-grid"></div>
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
+  
+  <!-- Header -->
+  <header>
+    <nav>
+      <a href="#" class="logo">Amir<span>.</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close-btn" id="mobileCloseBtn">
+      <i class="fas fa-times"></i>
+    </button>
+    <a href="index.html" class="active">Home</a>
+    <a href="about.html">About</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h5>Hello, It's Me</h5>
+          <h1>Amir P.Adam</h1>
+          <h2>I'm <span id="changing-text"></span></h2>
+          <p>A Final Year ECE undergrad transforming ideas into digital experiences with a focus on Embedded Systems and mobile applications development using React Native.</p>
+
+          <div class="social-icons">
+            <a href="https://github.com/amirphiladam2" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/amir-philip-29872524b/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/amirp_2808/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://x.com/amirphiladam" class="social-icon"><i class="fab fa-twitter"></i></a>
+          </div>
+          
+          <a href="resume.html" class="cta-button">Download CV</a>
+        </div>
+        
+        <div class="hero-image">
+          <div class="circle-wrap">
+            <div class="circle-spinner"></div>
+            <div class="circle">
+              <img src="images/dp.jpg" alt="Amir Profile" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Preview Section -->
+  <section class="projects-preview">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <p class="section-subtitle">Check out some of my recent work</p>
+      </div>
+      
+      <div class="project-cards">
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/onboard.jpg" alt="Finance Tracker App" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>React Native</span>
+              <span>Firebase</span>
+              <span>Expo</span>
+              <span>JavaScript</span>
+            </div>
+            <h3>Finance Tracker App</h3>
+            <p>A mobile application for tracking personal finances with visualization and budget planning.</p>
+            <div class="project-links">
+              <a href="myapps.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/wireless.jpg" alt="E-Commerce App" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>LoRa</span>
+              <span>ESP32</span>
+              <span>ESP8266</span>
+              <span>Flask Server</span>
+
+            </div>
+            <h3>Wireless Sensor Network with LoRa</h3>
+            <p>A complete wireless sensor network solution using LoRa technology for long-range communication.</p>
+            <div class="project-links">
+              <a href="https://techtacklenerd.blogspot.com/2024/10/introduction-in-this-project-ill-show.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-image">
+            <img src="images/alexagoogle.jpeg" alt="Embedded Systems Project" />
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span>C/C++</span>
+              <span>ESP8266</span>
+              <span>Alexa</span>
+              <span>Google Home</span>
+              <span>Sinric Pro</span>
+            </div>
+            <h3>Smart Home System Using Alexa & Google Controllers</h3>
+            <p>An integrated embedded system for home automation using microcontrollers and IoT technology.</p>
+            <div class="project-links">
+              <a href="https://techtacklenerd.blogspot.com/2023/07/led-control-using-alexa-and-google-home.html" class="project-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="more-projects">
+        <a href="portfolio.html" class="cta-button">View All Projects</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Amir P.Adam. All rights reserved.</p>
+    <div class="social-links">
+      <a href="https://github.com/amirphiladam2" class="social-link">GitHub</a>
+      <a href="https://www.linkedin.com/in/amir-phil-adam/" class="social-link">LinkedIn</a>
+      <a href="https://twitter.com/amirphiladam2" class="social-link">Twitter</a>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor (safe fallback)
+    const cursor = document.getElementById('cursor');
+    if (cursor) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.pageX + 'px';
+        cursor.style.top = e.pageY + 'px';
+      });
+    }
+  
+    // Mobile menu functionality
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const body = document.body;
+  
+    function toggleMenu() {
+      body.classList.toggle('menu-open');
+      mobileMenu.classList.toggle('active');
+    }
+  
+    mobileMenuBtn?.addEventListener('click', toggleMenu);
+    mobileCloseBtn?.addEventListener('click', toggleMenu);
+  
+    // Close menu when clicking on links inside it
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', toggleMenu);
+    });
+  
+    // Changing text effect
+    const changingText = document.getElementById('changing-text');
+    const texts = ['an Embedded System Engineer', 'and a React Native Developer'];
+    let index = 0;
+  
+    function updateText() {
+      if (!changingText) return;
+      changingText.style.opacity = 0;
+      setTimeout(() => {
+        changingText.textContent = texts[index];
+        changingText.style.opacity = 1;
+        index = (index + 1) % texts.length;
+      }, 500);
+    }
+  
+    setInterval(updateText, 2500);
+    updateText();
+  
+    // Initialize particles.js
+    particlesJS('particles', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: '#00f0ff'
+        },
+        shape: {
+          type: 'circle',
+          stroke: {
+            width: 0,
+            color: '#000000'
+          },
+          polygon: {
+            nb_sides: 5
+          }
+        },
+        opacity: {
+          value: 0.5,
+          random: false
+        },
+        size: {
+          value: 3,
+          random: true
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#00f0ff',
+          opacity: 0.4,
+          width: 1
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: {
+            enable: true,
+            mode: 'repulse'
+          },
+          onclick: {
+            enable: true,
+            mode: 'push'
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 400,
+            line_linked: {
+              opacity: 1
+            }
+          },
+          bubble: {
+            distance: 400,
+            size: 40,
+            duration: 2,
+            opacity: 8,
+            speed: 3
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.4
+          },
+          push: {
+            particles_nb: 4
+          },
+          remove: {
+            particles_nb: 2
+          }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+  

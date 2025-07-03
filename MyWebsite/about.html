@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - AMIR.DEV // Embedded Systems & React Native Engineer</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+    
+    :root {
+      --bg-primary: #0A0E17;  
+      --bg-secondary: #13151F;
+      --neon-primary: #00F0FF;
+      --neon-secondary: #FF00D6;
+      --accent-1: #7B00FF;
+      --accent-2: #00FF66;
+      --text-color: #E0E0E8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Custom cursor */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid var(--neon-primary);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, border-color 0.3s ease;
+      box-shadow: 0 0 15px var(--neon-primary), 0 0 5px var(--neon-primary);
+    }
+    
+    /* Scanline effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scanline 6s linear infinite;
+      opacity: 0.2;
+    }
+    
+    @keyframes scanline {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 0 100%;
+      }
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    /* Header Styling */
+    header {
+      padding: 1.5rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background-color: rgba(10, 14, 23, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    
+    .logo span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a.active {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--neon-primary);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--neon-primary);
+    }
+    
+    .nav-links a:hover {
+      color: var(--neon-primary);
+    }
+    
+    .nav-links a:hover:after,
+    .nav-links a.active:after {
+      width: 100%;
+    }
+
+    /* Main content */
+    main {
+      margin-top: 100px;
+      padding: 50px 0;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 80px;
+      position: relative;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: white;
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-title span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+    }
+
+    .page-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .divider {
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+      margin: 0 auto;
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--neon-primary);
+    }
+
+    /* About content */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-bottom: 80px;
+    }
+
+    .about-text {
+      background-color: rgba(19, 21, 31, 0.8);
+      padding: 40px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .about-text:hover {
+      border-color: var(--neon-primary);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 240, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .about-text h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+
+    .about-text p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+
+    .highlight {
+      color: var(--neon-primary);
+      font-weight: 600;
+      text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Stats section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .stat-card {
+      background-color: rgba(19, 21, 31, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .stat-card:hover:before {
+      left: 100%;
+    }
+
+    .stat-card:hover {
+      border-color: var(--neon-primary);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 240, 255, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      display: block;
+    }
+
+    .stat-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* Skills section */
+    .skills-section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 50px;
+      color: white;
+    }
+
+    .section-title span {
+      color: var(--neon-primary);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .skill-category {
+      background-color: rgba(19, 21, 31, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .skill-category:hover {
+      border-color: var(--neon-primary);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 240, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .skill-category h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--neon-primary);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill-tag {
+      background-color: rgba(0, 240, 255, 0.1);
+      color: var(--neon-primary);
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+      background-color: var(--neon-primary);
+      color: var(--bg-primary);
+      box-shadow: 0 0 10px var(--neon-primary);
+      transform: scale(1.05);
+    }
+
+    /* Timeline section */
+    .timeline-section {
+      margin-bottom: 80px;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .timeline:before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--neon-primary), var(--neon-secondary));
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px var(--neon-primary);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 50px;
+      width: 50%;
+    }
+
+    .timeline-item:nth-child(odd) {
+      left: 0;
+      padding-right: 40px;
+      text-align: right;
+    }
+
+    .timeline-item:nth-child(even) {
+      left: 50%;
+      padding-left: 40px;
+      text-align: left;
+    }
+
+    .timeline-content {
+      background-color: rgba(19, 21, 31, 0.9);
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .timeline-content:hover {
+      border-color: var(--neon-primary);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 240, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .timeline-date {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--neon-primary);
+      margin-bottom: 10px;
+      text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+    }
+
+    .timeline-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .timeline-desc {
+      font-size: 1rem;
+      color: var(--text-color);
+      opacity: 0.9;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      top: 20px;
+      width: 12px;
+      height: 12px;
+      background-color: var(--neon-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--neon-primary);
+    }
+
+    .timeline-item:nth-child(odd) .timeline-dot {
+      right: -6px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-dot {
+      left: -6px;
+    }
+
+    /* Background Effects */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      background-position: center;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .bg-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+      filter: blur(100px);
+    }
+
+    .shape-1 {
+      top: 20%;
+      left: 10%;
+      width: 400px;
+      height: 400px;
+      background-color: var(--neon-primary);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .shape-2 {
+      bottom: 20%;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      background-color: var(--neon-secondary);
+      animation: float 15s ease-in-out infinite reverse;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      background-color: var(--accent-1);
+      animation: float 18s ease-in-out infinite;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+      50% {
+        transform: translate(30px, 30px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .timeline:before {
+        left: 30px;
+      }
+
+      .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 60px !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+      }
+
+      .timeline-dot {
+        left: 24px !important;
+        right: auto !important;
+      }
+
+      .page-title {
+        font-size: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* FIXED: Removed display: none; and made nav-links responsive */
+      .nav-links {
+        gap: 1rem; /* Reduced gap for mobile */
+      }
+
+      .nav-links a {
+        font-size: 0.9rem; /* Slightly smaller font */
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Additional mobile optimization */
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 0.5rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 5px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: var(--neon-primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--neon-secondary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  
+  <!-- Scanline effect -->
+  <div class="scanlines"></div>
+  
+  <!-- Particle background -->
+  <canvas id="particles"></canvas>
+  
+  <!-- Background elements -->
+  <div class="bg-grid"></div>
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo">Amir<span>.</span></a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html" class="active">About</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">About <span>Me</span></h1>
+        <p class="page-subtitle">Get to know more about my journey and experiences</p>
+        <div class="divider"></div>
+      </div>
+
+      <!-- About Content -->
+      <div class="about-content">
+        <div class="about-text">
+          <h3>Who Am I?</h3>
+          <p>I'm <span class="highlight">Amir P. Adam</span>, a passionate final year Electronics and Communication Engineering student with a deep fascination for technology that bridges the physical and digital worlds.</p>
+          <p>My journey in tech began with curiosity about how things work, which led me to explore <span class="highlight">Embedded Systems</span> and <span class="highlight">Mobile App Development</span>. I believe in creating solutions that not only solve problems but also enhance user experiences.</p>
+          <p>When I'm not coding or tinkering with hardware, you'll find me exploring the latest tech trends, contributing to open-source projects, or sharing knowledge with fellow developers.</p>
+        </div>
+
+        <div class="about-text">
+          <h3>My Mission</h3>
+          <p>To bridge the gap between <span class="highlight">hardware and software</span>, creating innovative solutions that make technology more accessible and impactful in people's daily lives.</p>
+          <p>I'm constantly learning and adapting to new technologies, with a focus on <span class="highlight">IoT solutions</span>, <span class="highlight">mobile applications</span>, and <span class="highlight">embedded systems</span> that solve real-world problems.</p>
+          <p>My goal is to contribute to projects that have a meaningful impact while continuously growing as a developer and engineer.</p>
+        </div>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Projects Completed</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">2+</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Technologies</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Dedication</span>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <section class="skills-section">
+        <h2 class="section-title">My <span>Skills</span></h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h4>Mobile Development</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">React Native</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">CLI</span>
+              <span class="skill-tag">Firebase Authentication</span>
+              <span class="skill-tag">Expo</span>
+              <span class="skill-tag">Supabase</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>Embedded Systems</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Communication Protocols</span>
+              <span class="skill-tag">ESP32/ESP8266</span>
+              <span class="skill-tag">C/C++</span>
+              <span class="skill-tag">Raspberry Pi/Pico</span>
+              <span class="skill-tag">GPIOs</span>
+              <span class="skill-tag">LoRa</span>
+              <span class="skill-tag">Sensors</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>Web Development</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">HTML/CSS</span>
+              <span class="skill-tag">JavaScript</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>Tools & Others</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Git/GitHub</span>
+              <span class="skill-tag">VS Code</span>
+              <span class="skill-tag">Figma</span>
+              <span class="skill-tag">PlatformIO</span>
+              <span class="skill-tag">Arduino IDE</span>
+              <span class="skill-tag">MATLAB</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timeline Section -->
+      <section class="timeline-section">
+        <h2 class="section-title">My <span>Journey</span></h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-date">2024 - Present</div>
+              <h4 class="timeline-title">Advanced Learning Phase</h4>
+              <p class="timeline-desc">Focusing on STM32, Raspberry Pi, React Native Mobile App Development.</p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-date">2023 - 2024</div>
+              <h4 class="timeline-title">Project Development</h4>
+              <p class="timeline-desc">I started building multiple Embedded and IoT projects including wireless sensor networks, computer vision with arduino, IoT based weather monitoring system and smart home systems, ground station receiver.</p>
+              
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-date">2022 - 2023</div>
+              <h4 class="timeline-title">Skill Acquisition</h4>
+              <p class="timeline-desc">Learned MCU programming (Arduino, ESP32/ESP8266),circuit design and basic IoT concepts.
+                <br>Gained hands-on experience with various sensors and communication protocols.
+              </p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-date">2022</div>
+              <h4 class="timeline-title">Foundation Building</h4>
+              <p class="timeline-desc">Started my ECE journey, learned programming fundamentals, basic electronics and discovered my passion for technology.</p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Amir P. Adam. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://github.com/amirphiladam2" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/amirphiladam/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/amirphiladam" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Custom cursor effect
+    const cursor = document.getElementById('cursor');
+    
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    
+    // Change cursor on hover over links and buttons
+    document.querySelectorAll('a, button, .stat-card, .skill-tag').forEach(element => {
+      element.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        cursor.style.borderColor = '#FF00D6';
+        cursor.style.boxShadow = '0 0 15px #FF00D6, 0 0 5px #FF00D6';
+      });
+      
+      element.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursor.style.borderColor = '#00F0FF';
+        cursor.style.boxShadow = '0 0 15px #00F0FF, 0 0 5px #00F0FF';
+      });
+    });
+    // Particle background effect
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particlesArray = [];
+    const numberOfParticles = 100;
+    const colors = ['#00F0FF', '#FF00D6', '#7B00FF', '#00FF66'];
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.size > 0.2) this.size -= 0.1;
+      }
+      
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    function init() {
+      particlesArray = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        particlesArray.push(new Particle(x, y));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    
